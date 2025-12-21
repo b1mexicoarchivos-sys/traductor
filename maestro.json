@@ -1,7 +1,7 @@
 {
   "temas_premium": [
     {
-      "titulo": "Inglés para Traileros",
+      "titulo": "Ingles para traileros",
       "descripcion": "Frases esenciales para conductores.",
       "url": "https://b1mexicoarchivos-sys.github.io/traductor/ingles_para_traileros_premium.enc"
     },
@@ -11,7 +11,7 @@
       "url": "https://b1mexicoarchivos-sys.github.io/traductor/carga_y_documentacion_premium.enc"
     },
     {
-      "titulo": "DOT Inspección Oficial",
+      "titulo": "DOT Inspeccion Oficial",
       "descripcion": "Prepárate para las revisiones de oficiales.",
       "url": "https://b1mexicoarchivos-sys.github.io/traductor/dot_inspeccion_oficial_premium.enc"
     },
@@ -28,3 +28,4 @@
   ]
 
 }
+
