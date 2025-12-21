@@ -1,0 +1,29 @@
+{
+  "temas_premium": [
+    {
+      "titulo": "Inglés para Traileros",
+      "descripcion": "Frases esenciales para conductores.",
+      "url": "https://b1mexicoarchivos-sys.github.io/archivos/Ingles_para_traileros_premium.enc"
+    },
+    {
+      "titulo": "Carga y Documentación",
+      "descripcion": "Todo sobre papeles y logística.",
+      "url": "https://b1mexicoarchivos-sys.github.io/archivos/Carga_y_Documentación_premium.enc"
+    },
+    {
+      "titulo": "DOT Inspección Oficial",
+      "descripcion": "Prepárate para las revisiones de oficiales.",
+      "url": "https://b1mexicoarchivos-sys.github.io/archivos/DOT_Inspeccion_Oficial_premium.enc"
+    },
+    {
+      "titulo": "Estación de Servicio",
+      "descripcion": "Diesel, reparaciones y servicios.",
+      "url": "https://b1mexicoarchivos-sys.github.io/archivos/Estación_de_Servicio_premium.enc"
+    },
+    {
+      "titulo": "Mantenimiento y Ruta",
+      "descripcion": "Problemas mecánicos y navegación.",
+      "url": "https://b1mexicoarchivos-sys.github.io/archivos/Mantenimiento_y_Ruta_premium.enc"
+    }
+  ]
+}
