@@ -2,295 +2,124 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>B1 MÉXICO - CRM MAESTRO v18</title>
-    <style>
-        :root { --primary: #128c7e; --urgent: #ff4444; --gold: #FFD700; --plata: #C0C0C0; --activo: #2196F3; --bg: #f0f2f5; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { display: flex; gap: 20px; max-width: 1400px; width: 100%; flex-wrap: wrap; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex: 1; min-width: 350px; }
-        h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
-        label { display: block; margin-top: 8px; font-weight: bold; font-size: 0.85em; }
-        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        .btn-main { width: 100%; padding: 12px; background: var(--gold); border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; margin-bottom: 15px; }
-        .stat-card { padding: 10px; border-radius: 8px; text-align: center; color: white; cursor: pointer; font-size: 0.8em; }
-        .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-        .calendar-day { border: 1px solid #eee; padding: 5px; min-height: 40px; font-size: 0.7em; cursor: pointer; position: relative; background: #fff; }
-        .day-count { background: var(--primary); color: white; border-radius: 50%; width: 15px; height: 15px; display: flex; align-items: center; justify-content: center; position: absolute; bottom: 2px; right: 2px; font-size: 9px; }
-        .master-panel { background: #e3f2fd; padding: 15px; border-radius: 12px; border: 2px solid var(--activo); margin-bottom: 15px; display: none; }
-        .wa-box { background: #e8f5e9; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #c8e6c9; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activación Inglés para Tráileros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-gray-200 font-sans">
 
-<h1>🚛 CRM B1 MÉXICO - CONTROL TOTAL v18</h1>
-
-<div class="container">
-    <div class="card">
-        <h2>🔑 Registro Nuevo</h2>
-        <label>⚡ Pegado Rápido (WhatsApp):</label>
-        <textarea id="fast-paste" placeholder="Pega aquí el mensaje..." style="height: 60px;" oninput="importarDatosWA()"></textarea>
-        
-        <label>Nombre Completo:</label><input type="text" id="reg-fullname">
-        <label>Usuario (ID):</label><input type="text" id="reg-user">
-        <label>WhatsApp:</label><input type="text" id="reg-phone">
-        <label>Correo:</label><input type="email" id="reg-email">
-        <label>Padrino:</label><select id="reg-referrer"></select>
-        
-        <button class="btn-main" onclick="crearNuevo()">REGISTRAR ALUMNO</button>
-        <button onclick="resetForm()" style="width:100%; margin-top:5px; background:#90a4ae; border:none; padding:8px; border-radius:6px; color:white; cursor:pointer;">🗑️ LIMPIAR CAMPOS</button>
-        
-        <div style="display:flex; gap:5px; margin-top:15px;">
-            <button onclick="exportarJSON()" style="flex:1; font-size:10px;">📥 Respaldar</button>
-            <label style="flex:1; font-size:10px; background:#546e7a; color:white; text-align:center; padding:8px; border-radius:5px; cursor:pointer;">📤 Cargar JSON <input type="file" style="display:none;" onchange="importarJSON(event)"></label>
-        </div>
+    <div class="flex h-screen items-center justify-center">
+        <button onclick="toggleModal()" class="bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg font-bold">
+            Solicitar Licencia
+        </button>
     </div>
 
-    <div class="card">
-        <h2>📊 Tablero y Calendario</h2>
-        <div id="stats-summary" class="stats-grid"></div>
+    <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 transition-opacity">
         
-        <div class="calendar-nav">
-            <button onclick="cambiarMes(-1)">◀</button>
-            <strong id="calendar-month"></strong>
-            <button onclick="cambiarMes(1)">▶</button>
-        </div>
-        <div id="calendar-view" class="calendar-grid"></div>
-
-        <div id="master-panel" class="master-panel">
-            <button onclick="cerrarPanel()" style="float:right; border:none; background:none; cursor:pointer; font-size:20px;">✖</button>
-            <h3>🛠️ Perfil de Usuario</h3>
+        <div class="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative overflow-hidden animate-fade-in-up">
             
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <div>
-                    <label>Nombre:</label><input type="text" id="edit-fullname">
-                    <label>Usuario (ID):</label><input type="text" id="edit-user">
-                </div>
-                <div>
-                    <label>WhatsApp:</label><input type="text" id="edit-phone">
-                    <label>Correo:</label><input type="text" id="edit-email">
-                </div>
-            </div>
-            <button class="btn-main" onclick="guardarCambios()" style="background:var(--activo); color:white;">💾 GUARDAR CAMBIOS</button>
+            <button onclick="toggleModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-circle-xmark text-2xl"></i>
+            </button>
 
-            <div class="wa-box">
-                <h4 style="margin:0 0 10px 0;">📲 Mensajería y Licencias</h4>
-                <div style="display:flex; gap:5px; margin-bottom:10px;">
-                    <input type="number" id="lic-days" value="30" style="width:70px">
-                    <button onclick="generarLicenciaDesdeFicha()" style="flex:1; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer;">GENERAR LLAVE .ENC</button>
-                </div>
+            <div class="bg-slate-800 p-5 text-white">
+                <h2 class="text-lg font-bold">Inglés para tráileros B1</h2>
+                <p class="text-xs text-blue-400 font-semibold tracking-wider uppercase">Solicitar Activación de licencia</p>
+            </div>
+
+            <form id="activationForm" class="p-5 space-y-4">
                 
-                <label>Seleccionar Plantilla:</label>
-                <select id="wa-template" onchange="actualizarMensajeWA()">
-                    <option value="bienvenida">✅ Bienvenida + Llave</option>
-                    <option value="promo">🔥 Promo Buen Fin / Especial</option>
-                    <option value="vencimiento">⚠️ Aviso de Vencimiento</option>
-                    <option value="alerta_padrino">📢 Alerta Padrino (Ahijado vencido)</option>
-                    <option value="regalo_padrino">🎁 Premio Padrino (15 días regalo)</option>
-                </select>
-                <textarea id="wa-text" rows="4" style="margin-top:10px; font-size:0.85em;"></textarea>
-                <button class="btn-main" style="background:#25D366; color:white;" onclick="enviarWhatsApp()">ENVIAR POR WHATSAPP</button>
-            </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-bold text-gray-400">Fecha</label>
+                    <input type="text" id="fechaAuto" readonly 
+                        class="w-full bg-gray-50 text-gray-500 border-none text-sm focus:ring-0 p-1">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700">Nombre completo *</label>
+                    <input type="text" id="nombre" required placeholder="Nombre Completo"
+                        class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700">CURP (Primeros 6 dígitos) *</label>
+                    <input type="text" id="curp" required maxlength="6" placeholder="ABC123"
+                        class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none uppercase font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700">Número WhatsApp *</label>
+                    <input type="tel" id="whatsapp" required placeholder="+52000000000"
+                        class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700">Correo electrónico *</label>
+                    <input type="email" id="correo" required placeholder="usuario@gmail.com"
+                        class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 text-gray-400">Usuario que recomienda (Opcional)</label>
+                    <input type="text" id="referido" placeholder="Nombre del referido"
+                        class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
+                </div>
+
+                <button type="submit" 
+                    class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    Solicitar Licencia
+                </button>
+            </form>
         </div>
-
-        <div id="user-list-container" style="margin-top:15px;"></div>
     </div>
-</div>
 
-<script>
-    let db = JSON.parse(localStorage.getItem('b1_master_data'))?.activos || [];
-    let fechaCalendario = new Date();
-    let selectedIdx = null;
+    <style>
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fade-in-up 0.3s ease-out; }
+    </style>
 
-    function save() { 
-        localStorage.setItem('b1_master_data', JSON.stringify({activos:db})); 
-        actualizarTodo();
-    }
-
-    function actualizarTodo() {
-        renderCalendario();
-        actualizarStats();
-        const selPadrino = document.getElementById('reg-referrer');
-        let options = '<option value="">-- Registro Directo --</option>';
-        db.forEach(u => options += `<option value="${u.user}">${u.user}</option>`);
-        selPadrino.innerHTML = options;
-    }
-
-    function actualizarStats() {
-        const stats = { oro: 0, plata: 0, activo: 0, rojos: 0, total: db.length };
+    <script>
+        // Establecer fecha automática
         const hoy = new Date();
-        db.forEach(u => {
-            const num = db.filter(a => a.referrer === u.user).length;
-            if(num >= 10) stats.oro++; else if(num >= 5) stats.plata++; else if(num >= 2) stats.activo++;
-            const diff = Math.floor((hoy - new Date(u.fExp)) / (1000 * 60 * 60 * 24));
-            if(diff > 20) stats.rojos++;
-        });
-        document.getElementById('stats-summary').innerHTML = `
-            <div class="stat-card" style="background:#37474f" onclick="filtrar('todos')">Total<br>${stats.total}</div>
-            <div class="stat-card" style="background:var(--gold); color:black" onclick="filtrar('oro')">Oro<br>${stats.oro}</div>
-            <div class="stat-card" style="background:var(--plata); color:black" onclick="filtrar('plata')">Plata<br>${stats.plata}</div>
-            <div class="stat-card" style="background:var(--activo)" onclick="filtrar('activo')">Activo<br>${stats.activo}</div>
-            <div class="stat-card" style="background:var(--urgent)" onclick="filtrar('rojos')">Inact.<br>${stats.rojos}</div>
-        `;
-    }
+        document.getElementById('fechaAuto').value = hoy.toLocaleDateString();
 
-    function importarDatosWA() {
-        const texto = document.getElementById('fast-paste').value;
-        const extraer = (clave) => {
-            const linea = texto.split('\n').find(l => l.toLowerCase().includes(clave.toLowerCase()));
-            return linea ? linea.split(':')[1]?.trim() : "";
-        };
-
-        const nombre = extraer("Nombre");
-        const whatsapp = extraer("WhatsApp");
-        const correo = extraer("Correo");
-        const recomendado = extraer("Recomendado"); // Buscamos la etiqueta "Recomendado"
-
-        if(nombre) {
-            document.getElementById('reg-fullname').value = nombre;
-            document.getElementById('reg-user').value = nombre.replace(/\s/g, '').substring(0,6) + Math.floor(Math.random()*99);
+        function toggleModal() {
+            const modal = document.getElementById('modalOverlay');
+            modal.classList.toggle('hidden');
         }
-        if(whatsapp) document.getElementById('reg-phone').value = whatsapp.replace(/\D/g, '');
-        if(correo) document.getElementById('reg-email').value = correo;
 
-        // Lógica corregida para el Padrino:
-        if(recomendado) {
-            const select = document.getElementById('reg-referrer');
-            for(let i=0; i < select.options.length; i++) {
-                // Buscamos si el nombre del recomendado coincide con algún usuario registrado
-                if(select.options[i].text.toLowerCase().includes(recomendado.toLowerCase()) || 
-                   select.options[i].value.toLowerCase() === recomendado.toLowerCase()) {
-                    select.selectedIndex = i;
-                    break;
-                }
-            }
-        }
-    }
+        document.getElementById('activationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-    function renderCalendario() {
-        const view = document.getElementById('calendar-view');
-        const monthLabel = document.getElementById('calendar-month');
-        view.innerHTML = "";
-        const año = fechaCalendario.getFullYear();
-        const mes = fechaCalendario.getMonth();
-        monthLabel.innerText = new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(fechaCalendario);
-        const primerDia = new Date(año, mes, 1).getDay();
-        const diasMes = new Date(año, mes + 1, 0).getDate();
+            // Captura de datos
+            const nombre = document.getElementById('nombre').value;
+            const curp = document.getElementById('curp').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            const correo = document.getElementById('correo').value;
+            const referido = document.getElementById('referido').value || "Ninguno";
+            const fecha = document.getElementById('fechaAuto').value;
 
-        for(let i=0; i<primerDia; i++) view.innerHTML += `<div></div>`;
-        for(let d=1; d<=diasMes; d++) {
-            const fStr = `${año}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-            const count = db.filter(u => u.fReg === fStr).length;
-            view.innerHTML += `<div class="calendar-day" onclick="filtrar('fecha', '${fStr}')">${d} ${count > 0 ? `<div class="day-count">${count}</div>` : ''}</div>`;
-        }
-    }
+            // Formatear mensaje para WhatsApp
+            const mensaje = `*ACTIVACIÓN DE LICENCIA*%0A` +
+                            `*Curso:* Inglés para tráileros B1%0A` +
+                            `-------------------------------%0A` +
+                            `*Fecha:* ${fecha}%0A` +
+                            `*Nombre:* ${nombre}%0A` +
+                            `*CURP:* ${curp}%0A` +
+                            `*WhatsApp:* ${whatsapp}%0A` +
+                            `*Correo:* ${correo}%0A` +
+                            `*Recomendado por:* ${referido}`;
 
-    function filtrar(tipo, valor) {
-        const container = document.getElementById('user-list-container');
-        container.innerHTML = "";
-        const hoy = new Date();
-        const lista = db.filter(u => {
-            if(tipo === 'fecha') return u.fReg === valor;
-            const n = db.filter(a => a.referrer === u.user).length;
-            if(tipo === 'oro') return n >= 10;
-            if(tipo === 'plata') return n >= 5 && n < 10;
-            if(tipo === 'activo') return n >= 2 && n < 5;
-            if(tipo === 'rojos') return Math.floor((hoy - new Date(u.fExp)) / (1000 * 60 * 60 * 24)) > 20;
-            return true;
+            const numeroTel = "528112371397";
+            
+            // Abrir WhatsApp
+            window.open(`https://wa.me/${numeroTel}?text=${mensaje}`, '_blank');
         });
-
-        lista.forEach(u => {
-            const idx = db.findIndex(x => x.user === u.user);
-            const diff = Math.floor((hoy - new Date(u.fExp)) / (1000 * 60 * 60 * 24));
-            container.innerHTML += `
-                <div onclick="abrirFicha(${idx})" style="padding:10px; border-bottom:1px solid #eee; background:white; cursor:pointer; display:flex; justify-content:space-between; border-left: 5px solid ${diff > 20 ? 'red' : 'transparent'}">
-                    <div><b>${u.fullname}</b><br><small>${u.user} | Vence: ${u.fExp}</small></div>
-                    <span>Ver ></span>
-                </div>`;
-        });
-    }
-
-    function abrirFicha(i) {
-        selectedIdx = i;
-        const u = db[i];
-        document.getElementById('master-panel').style.display = 'block';
-        document.getElementById('edit-fullname').value = u.fullname;
-        document.getElementById('edit-user').value = u.user;
-        document.getElementById('edit-phone').value = u.phone;
-        document.getElementById('edit-email').value = u.email || "";
-        actualizarMensajeWA();
-        window.scrollTo(0,0);
-    }
-
-    function actualizarMensajeWA() {
-        const u = db[selectedIdx];
-        const temp = document.getElementById('wa-template').value;
-        const msgArea = document.getElementById('wa-text');
-        const msgs = {
-            bienvenida: `¡Hola ${u.fullname}! ✅ Bienvenido a B1 México.\nTu usuario: ${u.user}\nTu licencia vence el: ${u.fExp}\nTe adjunto tu llave de acceso .enc`,
-            promo: `🔥 BUEN FIN B1 MÉXICO 🔥\nHola ${u.user}, aprovecha nuestra promo: paga 1 mes y obtén acceso total hasta el 2026. 🚛💨`,
-            vence: `⚠️ AVISO DE VENCIMIENTO\nHola ${u.user}, tu licencia en B1 México vence el ${u.fExp}. ¡Renueva ahora para no perder tus clases!`,
-            alerta_padrino: `📢 AVISO PADRINO\nHola ${u.user}, un ahijado tuyo venció hoy. ¡Anímalo a renovar y gana días de regalo!`,
-            regalo_padrino: `🎁 ¡PREMIO ACTIVADO!\nFelicidades Padrino ${u.user}, tu ahijado renovó. Te hemos activado 15 días de regalo en tu cuenta. 🔑`
-        };
-        msgArea.value = msgs[temp];
-    }
-
-    function enviarWhatsApp() {
-        const tel = document.getElementById('edit-phone').value;
-        const txt = document.getElementById('wa-text').value;
-        window.open(`https://wa.me/${tel}?text=${encodeURIComponent(txt)}`);
-    }
-
-    function generarLicenciaDesdeFicha() {
-        const u = db[selectedIdx];
-        const days = parseInt(document.getElementById('lic-days').value);
-        let fBase = new Date() > new Date(u.fExp) ? new Date() : new Date(u.fExp);
-        fBase.setDate(fBase.getDate() + days);
-        u.fExp = fBase.toISOString().split('T')[0];
-        const cif = btoa(JSON.stringify({ user: u.user, email: u.email, valid_until: u.fExp }));
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([cif]));
-        a.download = `${u.user}_licencia.enc`;
-        a.click();
-        save();
-        alert("Licencia Generada y Fecha Actualizada");
-    }
-
-    function guardarCambios() {
-        db[selectedIdx].fullname = document.getElementById('edit-fullname').value;
-        db[selectedIdx].user = document.getElementById('edit-user').value;
-        db[selectedIdx].phone = document.getElementById('edit-phone').value;
-        db[selectedIdx].email = document.getElementById('edit-email').value;
-        save();
-        alert("Perfil Guardado");
-    }
-
-    function crearNuevo() {
-        const u = {
-            fullname: document.getElementById('reg-fullname').value,
-            user: document.getElementById('reg-user').value,
-            phone: document.getElementById('reg-phone').value,
-            email: document.getElementById('reg-email').value,
-            referrer: document.getElementById('reg-referrer').value,
-            fReg: new Date().toISOString().split('T')[0],
-            fExp: new Date().toISOString().split('T')[0]
-        };
-        if(!u.user || !u.phone) return alert("Faltan datos");
-        db.push(u);
-        save();
-        resetForm();
-        filtrar('fecha', u.fReg);
-    }
-
-    function cambiarMes(n) { fechaCalendario.setMonth(fechaCalendario.getMonth() + n); renderCalendario(); }
-    function resetForm() { document.querySelectorAll('.card input, #fast-paste').forEach(i => i.value=""); }
-    function cerrarPanel() { document.getElementById('master-panel').style.display = 'none'; }
-    function exportarJSON() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({activos:db}, null, 2)])); a.download = "B1_REPALDO.json"; a.click(); }
-    function importarJSON(e) { const r = new FileReader(); r.onload = (ev) => { db = JSON.parse(ev.target.result).activos || []; save(); }; r.readAsText(e.target.files[0]); }
-
-    actualizarTodo();
-</script>
+    </script>
 </body>
 </html>
