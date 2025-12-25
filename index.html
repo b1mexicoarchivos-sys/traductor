@@ -6,16 +6,27 @@
     <title>Activación Inglés para Tráileros</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fade-in-up 0.3s ease-out; }
+        .hidden { display: none; }
+        /* Rotación de la flecha */
+        .rotate-icon { transform: rotate(90deg); transition: transform 0.3s ease; }
+        .default-icon { transition: transform 0.3s ease; }
+    </style>
 </head>
 <body class="bg-gray-200 font-sans">
 
     <div class="flex h-screen items-center justify-center">
-        <button onclick="toggleModal()" class="bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg font-bold">
+        <button onclick="toggleModal()" class="bg-blue-600 text-white px-8 py-4 rounded-full shadow-lg font-bold hover:bg-blue-700 transition-all transform active:scale-95">
             Solicitar Licencia
-        </button>
+        </button>		
     </div>
-
-    <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 transition-opacity">
+	
+    <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
         
         <div class="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative overflow-hidden animate-fade-in-up">
             
@@ -25,100 +36,114 @@
 
             <div class="bg-slate-800 p-5 text-white">
                 <h2 class="text-lg font-bold">Inglés para tráileros B1</h2>
-                <p class="text-xs text-blue-400 font-semibold tracking-wider uppercase">Solicitar Activación de licencia</p>
+                <p class="text-xs text-blue-400 font-semibold tracking-wider uppercase">Activación de licencia</p>
             </div>
 
             <form id="activationForm" class="p-5 space-y-4">
                 
                 <div>
-                    <label class="block text-[10px] uppercase font-bold text-gray-400">Fecha</label>
+                    <label class="block text-[10px] uppercase font-bold text-gray-400">Fecha de solicitud</label>
                     <input type="text" id="fechaAuto" readonly 
-                        class="w-full bg-gray-50 text-gray-500 border-none text-sm focus:ring-0 p-1">
+                        class="w-full bg-gray-50 text-gray-500 border-none text-sm p-1 outline-none">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-gray-700">Nombre completo *</label>
-                    <input type="text" id="nombre" required placeholder="Nombre Completo"
+                    <input type="text" id="nombre" required placeholder="Ej. Juan Pérez"
                         class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-gray-700">CURP (Primeros 6 dígitos) *</label>
-                    <input type="text" id="curp" required maxlength="6" placeholder="ABC123"
-                        class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none uppercase font-mono">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-700">Número WhatsApp *</label>
-                    <input type="tel" id="whatsapp" required placeholder="+52000000000"
-                        class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700">CURP (6 dígitos) *</label>
+                        <input type="text" id="curp" required maxlength="6" placeholder="ABC123"
+                            class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none uppercase font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700">WhatsApp *</label>
+                        <div class="flex mt-1">
+                            <input type="text" id="lada" value="+52" 
+                                class="w-14 p-2.5 bg-gray-100 border border-gray-200 rounded-l-lg text-sm text-center font-bold text-gray-600 outline-none">
+                            <input type="tel" id="whatsapp" required maxlength="10" placeholder="10 dígitos"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                class="w-full p-2.5 bg-gray-50 border border-l-0 border-gray-200 rounded-r-lg text-sm focus:border-blue-500 outline-none">
+                        </div>
+                    </div>
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-gray-700">Correo electrónico *</label>
-                    <input type="email" id="correo" required placeholder="usuario@gmail.com"
+                    <input type="email" id="correo" required placeholder="usuario@correo.com"
                         class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 text-gray-400">Usuario que recomienda (Opcional)</label>
-                    <input type="text" id="referido" placeholder="Nombre del referido"
-                        class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
+                <div class="pt-2 border-t border-gray-100">
+                    <button type="button" onclick="togglePadrino()" class="flex items-center justify-between w-full text-blue-600 text-xs font-bold hover:text-blue-800 transition-colors">
+                        <span>¿TIENES UN PADRINO? AGREGAR AQUÍ</span>
+                        <i id="padrinoIcon" class="fa-solid fa-chevron-right default-icon"></i>
+                    </button>
+                    
+                    <div id="padrinoField" class="hidden mt-3 animate-fade-in-up">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase">Nombre del Padrino</label>
+                        <input type="text" id="padrino" placeholder="Nombre de quien te recomendó"
+                            class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none border-dashed border-2">
+                    </div>
                 </div>
 
                 <button type="submit" 
-                    class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95">
+                    class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 mt-4">
                     <i class="fa-brands fa-whatsapp text-xl"></i>
-                    Solicitar Licencia
+                    Enviar Solicitud
                 </button>
             </form>
         </div>
     </div>
 
-    <style>
-        @keyframes fade-in-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up { animation: fade-in-up 0.3s ease-out; }
-    </style>
-
     <script>
-        // Establecer fecha automática
-        const hoy = new Date();
-        document.getElementById('fechaAuto').value = hoy.toLocaleDateString();
+        // Fecha automática
+        document.getElementById('fechaAuto').value = new Date().toLocaleDateString();
 
         function toggleModal() {
-            const modal = document.getElementById('modalOverlay');
-            modal.classList.toggle('hidden');
+            document.getElementById('modalOverlay').classList.toggle('hidden');
+        }
+
+        function togglePadrino() {
+            const campo = document.getElementById('padrinoField');
+            const icono = document.getElementById('padrinoIcon');
+            
+            if (campo.classList.contains('hidden')) {
+                campo.classList.remove('hidden');
+                icono.classList.add('rotate-icon');
+            } else {
+                campo.classList.add('hidden');
+                icono.classList.remove('rotate-icon');
+            }
         }
 
         document.getElementById('activationForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Captura de datos
-            const nombre = document.getElementById('nombre').value;
-            const curp = document.getElementById('curp').value;
-            const whatsapp = document.getElementById('whatsapp').value;
-            const correo = document.getElementById('correo').value;
-            const referido = document.getElementById('referido').value || "Ninguno";
-            const fecha = document.getElementById('fechaAuto').value;
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                curp: document.getElementById('curp').value,
+                tel: document.getElementById('lada').value + document.getElementById('whatsapp').value,
+                correo: document.getElementById('correo').value,
+                padrino: document.getElementById('padrino').value || "Sin padrino",
+                fecha: document.getElementById('fechaAuto').value
+            };
 
-            // Formatear mensaje para WhatsApp
-            const mensaje = `*ACTIVACIÓN DE LICENCIA*%0A` +
-                            `*Curso:* Inglés para tráileros B1%0A` +
+            const mensaje = `SOLICITUD DE LICENCIA*%0A` +
+                            `Curso:* Inglés para tráileros B1%0A` +
                             `-------------------------------%0A` +
-                            `*Fecha:* ${fecha}%0A` +
-                            `*Nombre:* ${nombre}%0A` +
-                            `*CURP:* ${curp}%0A` +
-                            `*WhatsApp:* ${whatsapp}%0A` +
-                            `*Correo:* ${correo}%0A` +
-                            `*Recomendado por:* ${referido}`;
+                            `Fecha: ${datos.fecha}%0A` +
+                            `Nombre: ${datos.nombre}%0A` +
+                            `CURP: ${datos.curp}%0A` +
+                            `WhatsApp: ${datos.tel}%0A` +
+                            `Correo: ${datos.correo}%0A` +
+                            `Padrino:  ${datos.padrino}`;
 
-            const numeroTel = "528112371397";
-            
-            // Abrir WhatsApp
-            window.open(`https://wa.me/${numeroTel}?text=${mensaje}`, '_blank');
+            const numeroAdmin = "528112371397";
+            window.open(`https://wa.me/${numeroAdmin}?text=${mensaje}`, '_blank');
         });
     </script>
 </body>
