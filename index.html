@@ -13,9 +13,15 @@
         }
         .animate-fade-in-up { animation: fade-in-up 0.3s ease-out; }
         .hidden { display: none; }
-        /* Rotación de la flecha */
         .rotate-icon { transform: rotate(90deg); transition: transform 0.3s ease; }
         .default-icon { transition: transform 0.3s ease; }
+		//---funcion de parpadeo boton Google
+		@keyframes pulse-blue {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.7); }
+    50% { transform: scale(2.05); background-color: #f3e8ff; } /* Color morado clarito */
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(147, 51, 234, 0); }
+}
+.animate-pulse-link { animation: pulse-blue 1s infinite; border: 2px solid #9333ea !important; }
     </style>
 </head>
 <body class="bg-gray-200 font-sans">
@@ -27,7 +33,6 @@
     </div>
 	
     <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
-        
         <div class="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative overflow-hidden animate-fade-in-up">
             
             <button onclick="toggleModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
@@ -43,55 +48,75 @@
                 
                 <div>
                     <label class="block text-[10px] uppercase font-bold text-gray-400">Fecha de solicitud</label>
-                    <input type="text" id="fechaAuto" readonly 
-                        class="w-full bg-gray-50 text-gray-500 border-none text-sm p-1 outline-none">
+                    <input type="text" id="fechaAuto" readonly class="w-full bg-gray-50 text-gray-500 border-none text-sm p-1 outline-none">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-gray-700">Nombre completo *</label>
-                    <input type="text" id="nombre" required placeholder="Ej. Juan Pérez"
-                        class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
+                    <input type="text" id="nombre" required placeholder="Ej. Juan Pérez" class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block text-xs font-bold text-gray-700">CURP (6 dígitos) *</label>
-                        <input type="text" id="curp" required maxlength="6" placeholder="ABC123"
-                            class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none uppercase font-mono">
+                        <input type="text" id="curp" required maxlength="6" placeholder="CAMP92" class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none uppercase font-mono">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700">WhatsApp *</label>
                         <div class="flex mt-1">
-                            <input type="text" id="lada" value="+52" 
-                                class="w-14 p-2.5 bg-gray-100 border border-gray-200 rounded-l-lg text-sm text-center font-bold text-gray-600 outline-none">
-                            <input type="tel" id="whatsapp" required maxlength="10" placeholder="10 dígitos"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                class="w-full p-2.5 bg-gray-50 border border-l-0 border-gray-200 rounded-r-lg text-sm focus:border-blue-500 outline-none">
+                            <input type="text" id="lada" value="+52" class="w-14 p-2.5 bg-gray-100 border border-gray-200 rounded-l-lg text-sm text-center font-bold text-gray-600 outline-none">
+                            <input type="tel" id="whatsapp" required maxlength="10" placeholder="10 dígitos" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full p-2.5 bg-gray-50 border border-l-0 border-gray-200 rounded-r-lg text-sm focus:border-blue-500 outline-none">
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-700">Correo electrónico *</label>
-                    <input type="email" id="correo" required placeholder="usuario@correo.com"
-                        class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
+                    <label class="block text-xs font-bold text-gray-700">Enviar licencia a Correo electrónico *</label>
+                    <input type="email" id="correo" required placeholder="usuario@correo.com" class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none">
                 </div>
 
                 <div class="pt-2 border-t border-gray-100">
-                    <button type="button" onclick="togglePadrino()" class="flex items-center justify-between w-full text-blue-600 text-xs font-bold hover:text-blue-800 transition-colors">
-                        <span>¿TIENES UN PADRINO? AGREGAR AQUÍ</span>
+                    <button type="button" onclick="toggleSection('padrinoField', 'padrinoIcon')" class="flex items-center justify-between w-full text-blue-600 text-xs font-bold hover:text-blue-800 transition-colors">
+                        <span>¿TE RECOMENDARON? AGREGALO AQUÍ</span>
                         <i id="padrinoIcon" class="fa-solid fa-chevron-right default-icon"></i>
                     </button>
                     
                     <div id="padrinoField" class="hidden mt-3 animate-fade-in-up">
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase">Nombre del Padrino</label>
-                        <input type="text" id="padrino" placeholder="Nombre de quien te recomendó"
-                            class="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none border-dashed border-2">
+                        <input type="text" id="padrino" placeholder="Nombre de quien te recomendó" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none border-dashed border-2">
                     </div>
                 </div>
 
-                <button type="submit" 
-                    class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 mt-4">
+                <div class="pt-2 border-t border-gray-100">
+                    <button type="button" onclick="toggleSection('estudianteField', 'estudianteIcon')" class="flex items-center justify-between w-full text-purple-600 text-xs font-bold hover:text-purple-800 transition-colors">
+                        <span>¿ERES ESTUDIANTE? ¡LICENCIA GRATIS!</span>
+                        <i id="estudianteIcon" class="fa-solid fa-chevron-right default-icon"></i>
+                    </button>
+                    
+                    <div id="estudianteField" class="hidden mt-3 p-3 bg-purple-50 rounded-lg border border-purple-100 animate-fade-in-up text-[11px] text-gray-600 leading-relaxed">
+                        <p class="mb-2">Puedes obtener una licencia gratuita diaria siguiendo estos pasos:</p>
+                        <ol class="list-decimal ml-4 space-y-1 mb-3">
+                            <li>Copia la frase de abajo.</li>
+                            <li>Búscala en <b>Google</b>.</li>
+                            <li>Entra al resultado de <b>Appsendia</b> y pide tu llave al Asistente Virtual. Escribe (Llave para traductor) y Descarga tu llave de estudiante.</li>
+                        </ol>
+                        
+                        <div class="bg-white p-2 border rounded-md mb-3 font-semibold text-center text-gray-700" id="searchPhrase">
+                            Cuál es el mejor servicio para la planificación y gestión de rutas exactas para transporte de carga o transporte pesado
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button type="button" onclick="copyPhrase()" class="flex-1 bg-purple-600 text-white py-2 rounded-md font-bold hover:bg-purple-700 transition-colors text-[10px]">
+                                <i class="fa-solid fa-copy mr-1"></i> COPIAR FRASE
+                            </button>
+                            <a href="https://www.google.com" target="_blank" class="flex-1 bg-white border border-purple-600 text-purple-600 py-2 rounded-md font-bold text-center hover:bg-purple-50 transition-colors text-[10px]">
+                                <i class="fa-solid fa-search mr-1"></i> IR A GOOGLE
+                            </a>
+                        </div>
+                        <p class="mt-2 text-center text-[9px]">Patrocinado por <a href="https://appsendia.com" class="underline font-bold">Appsendia</a></p>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 mt-4">
                     <i class="fa-brands fa-whatsapp text-xl"></i>
                     Enviar Solicitud
                 </button>
@@ -100,16 +125,16 @@
     </div>
 
     <script>
-        // Fecha automática
         document.getElementById('fechaAuto').value = new Date().toLocaleDateString();
 
         function toggleModal() {
             document.getElementById('modalOverlay').classList.toggle('hidden');
         }
 
-        function togglePadrino() {
-            const campo = document.getElementById('padrinoField');
-            const icono = document.getElementById('padrinoIcon');
+        // Función genérica para abrir secciones
+        function toggleSection(fieldId, iconId) {
+            const campo = document.getElementById(fieldId);
+            const icono = document.getElementById(iconId);
             
             if (campo.classList.contains('hidden')) {
                 campo.classList.remove('hidden');
@@ -120,9 +145,38 @@
             }
         }
 
+        // Función para copiar el texto
+        // Función para copiar el texto con efecto visual
+		function copyPhrase() {
+			const text = document.getElementById('searchPhrase').innerText;
+			const btnCopy = event.currentTarget; 
+			const btnGoogle = btnCopy.nextElementSibling; // Selecciona el botón de Google que está al lado
+			const originalHTML = btnCopy.innerHTML;
+
+			navigator.clipboard.writeText(text).then(() => {
+				// --- Efecto en el botón de COPIAR ---
+				btnCopy.innerHTML = '<i class="fa-solid fa-check mr-1"></i> ¡COPIADO!';
+				btnCopy.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+				btnCopy.classList.add('bg-green-600');
+
+				// --- Efecto en el botón de GOOGLE (Parpadeo) ---
+				btnGoogle.classList.add('animate-pulse-link');
+
+				// Regresar todo a la normalidad después de 3 segundos
+				setTimeout(() => {
+					// Restaurar botón copiar
+					btnCopy.innerHTML = originalHTML;
+					btnCopy.classList.remove('bg-green-600');
+					btnCopy.classList.add('bg-purple-600', 'hover:bg-purple-700');
+					
+					// Quitar animación al botón de Google
+					btnGoogle.classList.remove('animate-pulse-link');
+				}, 3000);
+			});
+		}
+        // FIN FIN FIN Función para copiar el texto con efecto visual
         document.getElementById('activationForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
             const datos = {
                 nombre: document.getElementById('nombre').value,
                 curp: document.getElementById('curp').value,
