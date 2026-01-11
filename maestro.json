@@ -26,12 +26,13 @@
       "url": "https://b1mexicoarchivos-sys.github.io/traductor/mantenimiento_y_ruta_premium.enc"
     },
 	{
-      "titulo": "DOT_Inspection",
-      "descripcion": "Preguntas DOT",
-      "url": "https://b1mexicoarchivos-sys.github.io/traductor/pam/dot_Inspection_premium.enc"
+      "titulo": "preguntas_en_el_dot",
+      "descripcion": "Preguntas comunes durante la inspeccion DOT",
+      "url": "https://b1mexicoarchivos-sys.github.io/traductor/pam/preguntas_en_el_dot_premium.enc"
     }
 	
   ]
 
 }
+
 
