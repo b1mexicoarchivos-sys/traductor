@@ -29,27 +29,9 @@
       "titulo": "DOT_Inspection",
       "descripcion": "Preguntas DOT",
       "url": "https://b1mexicoarchivos-sys.github.io/traductor/pam/dot_Inspection_premium.enc"
-    },
-	{
-      "titulo": "Fraces_comunes",
-      "descripcion": "Fraces del dia a dia",
-      "url": "https://b1mexicoarchivos-sys.github.io/traductor/pam/fraces_comunes_premium.enc"
-    },
-	{
-      "titulo": "Palabras_clave",
-      "descripcion": "Palabras para la ruta",
-      "url": "https://b1mexicoarchivos-sys.github.io/traductor/pam/palabras_clave_premium.enc"
-    },
-	{
-      "titulo": "Questions_D.O.T_1",
-      "descripcion": "Ingles qué deves saber 1",
-      "url": "https://b1mexicoarchivos-sys.github.io/traductor/pam/questions_d.o.t_1_premium.enc"
-    },
-	{
-      "titulo": "Questions_D.O.T_2",
-      "descripcion": "Ingles qué deves saber 2",
-      "url": "https://b1mexicoarchivos-sys.github.io/traductor/pam/questions_d.o.t_2_premium.enc"
     }
+	
   ]
 
 }
+
